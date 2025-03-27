@@ -15,5 +15,4 @@ const todos = mongoose.model("todos", todoSchema);
 
 module.exports={
     todos,
-    sdsa 
 }
