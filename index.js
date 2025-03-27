@@ -27,7 +27,7 @@ app.put("/completed", (req,res)=>{
     if(!parsedPayload.success){
         res.status(411).json({
             msg: "Cannot update check it!"
-        })
+        }) 
         return
     }
     
