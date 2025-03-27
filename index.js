@@ -8,9 +8,9 @@ app.post("/todo", (req,res)=>{
     //validation -- checking with types.js
     const createPayload = req.body;
     const parsedPayload = createTodo.safeParse(createPayload);
-    if(!parsedPayload){
+    if(!parsedPayload.success){
         res.status(411).json({
-            msg: "You have sent the wrong inputs";
+            msg: "You have sent the wrong inputs"
         })
         return
     }
@@ -24,10 +24,11 @@ app.put("/completed", (req,res)=>{
 
     const updatePayload = req.body;
     const parsedPayload = updateTodo.safeParse(updatePayload);
-    if(!parsedPayload){
+    if(!parsedPayload.success){
         res.status(411).json({
-            msg:
+            msg: "Cannot update check it!"
         })
+        return
     }
     
 })
