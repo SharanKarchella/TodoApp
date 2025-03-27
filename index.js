@@ -1,11 +1,15 @@
 
 import express from "express"
 import {createTodo, updateTodo} from "./types"
-
+const {todos} = require("./db");
 const app = express();
 
-app.post("/todo", (req,res)=>{
+app.use(express.json());
+
+app.post("/todo", async(req,res)=>{
+
     //validation -- checking with types.js
+
     const createPayload = req.body;
     const parsedPayload = createTodo.safeParse(createPayload);
     if(!parsedPayload.success){
@@ -14,13 +18,24 @@ app.post("/todo", (req,res)=>{
         })
         return
     }
+
+    //put it in mongodb
+    await todos.create({
+        title: createPayload.title,
+        description: createPayload.description,
+    })
 })
 
-app.get("/todos", (req,res)=>{
+app.get("/todos", async(req,res)=>{
+    //get it from db-todos
+    const todosF = await todos.find({});
+    res.json({
+        todosF
+    })
     
 })
 
-app.put("/completed", (req,res)=>{
+app.put("/completed", async(req,res)=>{
 
     const updatePayload = req.body;
     const parsedPayload = updateTodo.safeParse(updatePayload);
@@ -30,7 +45,16 @@ app.put("/completed", (req,res)=>{
         }) 
         return
     }
-    
+    //put it in mongodb
+    await todos.update({
+        _id: req.body.id
+    },{
+        completed: true
+    })
+    res.json({
+        msg: "Todo marked as completed"
+    })
+       
 })
 
 app.listen('4000',()=>{
